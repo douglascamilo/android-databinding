@@ -41,16 +41,19 @@ class ListaNotasAdapter(
     }
 
     inner class ViewHolder(
-        private val viewDataBinding: ItemNotaBinding
-        ) : RecyclerView.ViewHolder(viewDataBinding.root) {
+        private val viewDataBinding: ItemNotaBinding) :
+        RecyclerView.ViewHolder(viewDataBinding.root),
+        View.OnClickListener {
 
         private lateinit var nota: Nota
 
         init {
-            itemView.setOnClickListener {
-                if (::nota.isInitialized) {
-                    onItemClickListener(nota)
-                }
+            viewDataBinding.clicaNaNota = this
+        }
+
+        override fun onClick(view: View?) {
+            if (::nota.isInitialized) {
+                onItemClickListener(nota)
             }
         }
 
