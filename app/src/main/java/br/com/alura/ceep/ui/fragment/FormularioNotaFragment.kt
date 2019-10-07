@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import br.com.alura.ceep.R
+import br.com.alura.ceep.databinding.FormularioNotaBinding
 import br.com.alura.ceep.model.Nota
 import br.com.alura.ceep.repository.Falha
 import br.com.alura.ceep.repository.Sucesso
@@ -38,19 +39,13 @@ class FormularioNotaFragment : Fragment() {
         findNavController()
     }
     private lateinit var notaEncontrada: Nota
+    private lateinit var viewDataBinding: FormularioNotaBinding
+
     private var urlAtual: String = ""
-    private val campoTitulo: EditText by lazy {
-        formulario_nota_titulo
-    }
-    private val campoDescricao: EditText by lazy {
-        formulario_nota_descricao
-    }
-    private val campoFavorita: CheckBox by lazy {
-        formulario_nota_favorita
-    }
     private val campoImagem: ImageView by lazy {
         formulario_nota_imagem
     }
+
     private val fabAdicionaImagem: FloatingActionButton by lazy {
         formulario_nota_fab_adiciona_imagem
     }
@@ -65,11 +60,8 @@ class FormularioNotaFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(
-            R.layout.formulario_nota,
-            container,
-            false
-        )
+        viewDataBinding = FormularioNotaBinding.inflate(inflater, container, false)
+        return viewDataBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -84,8 +76,9 @@ class FormularioNotaFragment : Fragment() {
         if (temIdValido()) {
             viewModel.buscaPorId(notaId).observe(this, Observer {
                 it?.let { notaEncontrada ->
+                    this.viewDataBinding.nota = notaEncontrada
+
                     inicializaNota(notaEncontrada)
-                    inicializaCampos()
                     appViewModel.temComponentes = appBarParaEdicao()
                 }
             })
@@ -131,15 +124,6 @@ class FormularioNotaFragment : Fragment() {
         urlAtual = this.notaEncontrada.imagemUrl
     }
 
-    private fun inicializaCampos() {
-        if (::notaEncontrada.isInitialized) {
-            campoTitulo.setText(notaEncontrada.titulo)
-            campoDescricao.setText(notaEncontrada.descricao)
-            campoFavorita.isChecked = notaEncontrada.favorita
-            configuraImagem()
-        }
-    }
-
     private fun configuraImagem() {
         configuraVisibilidadeDeComponentes()
         campoImagem.carregaImagem(urlAtual)
@@ -182,6 +166,4 @@ class FormularioNotaFragment : Fragment() {
             }
         })
     }
-
 }
-
