@@ -17,7 +17,7 @@
             android:layout_width="0dp"
             android:layout_height="200dp"
             android:onClick="@{solicitaImagem}"
-            android:visibility="@{nota.imagemUrl.isEmpty() ? View.GONE : View.VISIBLE}"
+            android:visibility="@{nota.temUrl ? View.VISIBLE : View.GONE}"
             app:carregaImagem="@{nota.imagemUrl}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -80,7 +80,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:src="@drawable/ic_action_adiciona_foto"
-            android:visibility="@{nota.imagemUrl.empty ? View.VISIBLE : View.GONE}"
+            android:visibility="@{nota.temUrl ? View.GONE : View.VISIBLE}"
+            android:onClick="@{solicitaImagem}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
